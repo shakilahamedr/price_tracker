@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs')%>
+<body>
+
+    <h2 style="text-align: center;">Amazon Price Tracker</h2>
+
+<div class="container">
+  <form action="/index" method="POST">
+  
+    <div class="row">
+      <div class="col-25">
+        <label for="url">Product URL</label>
+      </div>
+      <div class="col-75">
+        <input type="url" id="url" name="url" placeholder="Enter the URL">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-25">
+        <label for="minprice">Minimum Price</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="minprice" name="minprice" placeholder="Enter Minimum Price">
+      </div>
+    </div>
+   
+    <div class="row">
+      <div class="col-25">
+        <label for="email">Email</label>
+      </div>
+      <div class="col-75">
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+      </div>
+    </div>
+    
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+</div>
+
+    <%- include('./partials/footer.ejs')%>
+</body>
+</html>
