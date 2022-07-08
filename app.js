@@ -22,8 +22,8 @@ mongoose.connect(dBURI,{useNewUrlParser:true,useUnifiedTopology:true})
 .catch((err)=>console.log(err))
 
 
-//every 1 min price check using node-schedule
-schedule.scheduleJob('*/5 * * * *',()=>{
+//every 12 hr price check using node-schedule
+schedule.scheduleJob('* */12 * * *',()=>{
 
     Product.find()
     .then((results)=>{
