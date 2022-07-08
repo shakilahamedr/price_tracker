@@ -66,7 +66,7 @@ async function checkPrice(page)
     //let website_price=100
 
     const website_price = await page.evaluate(()=>document.getElementById("tp_price_block_total_price_ww").getElementsByClassName("a-offscreen")[0].innerText)
-    .catch((err)=>{console.log("id might be have changed in amazon website")})
+    .catch((err)=>{console.log("price element id might have changed in that product's website")})
 
     //console.log(website_price);
     // if(website_price)
