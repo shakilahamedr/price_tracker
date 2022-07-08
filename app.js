@@ -23,7 +23,7 @@ mongoose.connect(dBURI,{useNewUrlParser:true,useUnifiedTopology:true})
 
 
 //every 1 min price check using node-schedule
-schedule.scheduleJob('* */12 * * *',()=>{
+schedule.scheduleJob('*/5 * * * *',()=>{
 
     Product.find()
     .then((results)=>{
@@ -36,7 +36,9 @@ schedule.scheduleJob('* */12 * * *',()=>{
           var initialurl = eachproduct.url
           var spliturl = initialurl.split('ref')
           var url=spliturl[0]
+          //var url = "https://www.amazon.in/Dove-Cream-Beauty-Bar-Moisturised/dp/B08S51KLZ5/";
           
+          //console.log(url);
 
           configureBrowser()
 
@@ -53,6 +55,7 @@ schedule.scheduleJob('* */12 * * *',()=>{
           {
             await page.goto(url)
             //console.log("in amazon web page")
+            //console.log(url);
             await checkPrice(page)
           }
 
@@ -62,40 +65,52 @@ async function checkPrice(page)
     //console.log("inside checkprice function")
     //let website_price=100
 
-    let website_price = await page.evaluate(()=>document.getElementById('priceblock_ourprice').innerText)
-    .catch((err)=>{console.log(err)})
+    const website_price = await page.evaluate(()=>document.getElementById("tp_price_block_total_price_ww").getElementsByClassName("a-offscreen")[0].innerText)
+    .catch((err)=>{console.log("id might be have changed in amazon website")})
+
+    //console.log(website_price);
+    // if(website_price)
+    // {
+    //     console.log(true)
+    // }
+    // else{
+    //     console.log(false)
+    // }
+    if(website_price)
+    {
     const commaprice = website_price.replace('₹', '')
     const current_price = parseFloat(commaprice.replace(',',''))
 
     if(current_price<minprice)
     {
-        console.log(current_price)
+        //console.log(current_price)
 
         let mailOptions = {
-            from: 'CallbackCats ',
+            from: 'Amazon Price Tracker',
             to: email,
             subject: 'PRICE DROPPED TO ' + current_price,
-            text: `The price on ${url} has dropped below ${minprice} `
+            text: `The price on ${url} has dropped below your desired minimum price ${minprice}. The current price is ${current_price}.`
         };
 
         transporter.sendMail(mailOptions, function(err, data){
             if (err){
                 console.log('Error Occurs',err);
             }else{
-                console.log('Email sent!!!');
+                console.log('Email sent!!! to ' + email+" with message the price on "+url+" has dropped below your desired minimum price "+minprice+". the current price is "+current_price+"\n");
             }
                          });
 
-         Product.findByIdAndDelete(id)
-           .then((r)=>{
-           })                
+        //  Product.findByIdAndDelete(id)
+        //    .then((r)=>{
+        //    })                
 
 
     }
 }
+ }
+      })
      })
-    })
-})
+ })
 
 //routes
 app.set()
